@@ -3,6 +3,7 @@
 #change the interface names first (WAN/isolated)
 
 #WAN
+echo "WAN Output"
 nmcli connection modify wan connection.autoconnect yes
 nmcli connection show wan | grep connection.autoconnect
 nmcli connection modify wan ipv4.method auto
@@ -13,6 +14,7 @@ nmcli con show wan | grep ipv4.ignore-auto-routes
 nmcli connection modify wan ipv4.ignore-auto-dns yes
 nmcli con show wan | grep ipv4.ignore-auto-dns
 #isolated
+echo "Isolated Output"
 nmcli connection modify isolated connection.autoconnect yes
 nmcli connection modify isolated ipv4.addresses 192.168.1.1/24
 nmcli connection show isolated | grep ipv4.addresses
@@ -27,7 +29,7 @@ nmcli con show isolated | grep ipv4.method
 echo ""
 echo ""
 echo ""
-echo "Compare the output above with the following"
+echo " The output above should match the output below"
 echo "================================================="
 echo ""
 echo ""
