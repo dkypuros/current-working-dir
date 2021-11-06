@@ -2,6 +2,9 @@
 
 #change the interface names first (WAN/isolated)
 
+echo ""
+echo ""
+echo ""
 #WAN
 echo "WAN Output"
 nmcli connection modify wan connection.autoconnect yes

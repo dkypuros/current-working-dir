@@ -1,3 +1,4 @@
+WAN Output
 connection.autoconnect:                 yes
 connection.autoconnect-priority:        0
 connection.autoconnect-retries:         -1 (default)
@@ -6,6 +7,7 @@ ipv4.method:                            auto
 ipv4.gateway:                           --
 ipv4.ignore-auto-routes:                no
 ipv4.ignore-auto-dns:                   yes
+Isolated Output
 ipv4.addresses:                         192.168.1.1/24
 connection.autoconnect:                 yes
 connection.autoconnect-priority:        0
