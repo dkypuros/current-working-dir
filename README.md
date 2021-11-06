@@ -1,4 +1,6 @@
-# David's User Provisioned Infrastructure Bash Scripts for OpenShift
+# OCP 4.8 Bare Metal UPI
+## David's Walk through Chapter 7 of the Docs
+
 The purpose of the scripts is to walk through every section of the documentation
 
 - 7.1. PREPARING FOR BARE METAL CLUSTER INSTALLATION
