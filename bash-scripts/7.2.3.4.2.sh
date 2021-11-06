@@ -24,6 +24,12 @@ nmcli connection show isolated | grep dns-search
 nmcli connection show isolated | grep ipv4.gateway
 nmcli connection modify isolated ipv4.method manual
 nmcli con show isolated | grep ipv4.method
-
+echo ""
+echo ""
+echo ""
 echo "Compare the output above with the following"
+echo "================================================="
+echo ""
+echo ""
+echo ""
 cat /work_dir/current-working-dir/bash-scripts/7.2.3.4.2.compare
