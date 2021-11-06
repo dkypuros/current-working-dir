@@ -17,7 +17,7 @@ The system will have 2 network interfaces configured as follows:
 The "WAN" NIC directs traffic toward the internet
 
 ```bash
-[root@helper ~]# nmcli con show
+nmcli con show
 ```
 
 NAME UUID TYPE DEVICE
@@ -123,14 +123,14 @@ nmcli connection modify isolated ipv4.method manual
 nmcli con show isolated | grep ipv4.method
 ```
 
-- 7.2.3.5.1. Example DNS configuration for user-provisioned clusters
+## 7.2.3.5.1. Example DNS configuration for user-provisioned clusters
 
 There are 3 DNS configuratoin files.
 1. named.conf
 2. /zones/db.example.com
 3. /zones/db.reverse
 
-7.2.3.6. Load balancing requirements for user-provisioned infrastructure
+## 7.2.3.6. Load balancing requirements for user-provisioned infrastructure
 
 
 
