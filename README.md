@@ -39,6 +39,17 @@ nmcli con modify enp2s0 connection.id isolated
 nmcli con modify enp1s0 connection.id wan
 ```
 
+>Once the connections are named, you can skip these steps once you understand them by trying atleast once and run the script.
+
+``bash
+dnf install git -y
+mkdir /work_dir
+cd /work_dir
+git clone https://github.com/dkypuros/current-working-dir.git
+cd bare-metal-ocp/
+
+```
+
 Connection Autoconnect
 ```bash
 nmcli connection modify wan connection.autoconnect yes
