@@ -1,7 +1,7 @@
 # OCP 4.8 Bare Metal UPI
 ## David's Walk through Chapter 7 of the Docs
 
-The purpose of the scripts is to walk through every section of the documentation
+The purpose of these instructions is to walk through all 3 sections of the documentation (7.1, 7.2, and 7.3)
 
 - 7.1. PREPARING FOR BARE METAL CLUSTER INSTALLATION
 >This is mainly informational
@@ -17,6 +17,7 @@ The "WAN" NIC directs traffic toward the internet
 
 ```bash
 [root@helper ~]# nmcli con show
+```
 
 NAME UUID TYPE DEVICE
 
@@ -31,35 +32,35 @@ nmcli connection modify wan setting.property value
 
 
 Name the connections:
-
+```bash
 nmcli con modify enp2s0 connection.id isolated
 
 nmcli con modify enp1s0 connection.id wan
-
+```
 
 Connection Autoconnect
-
+```bash
 nmcli connection modify wan connection.autoconnect yes
 
 nmcli connection show wan | grep connection.autoconnect
-
+```
 
 IPv4 Method:
-
+```bash
 nmcli connection modify wan ipv4.method auto
 
 nmcli con show wan | grep ipv4.method
-
+```
 
 DNS Localhost:
-
+```bash
 nmcli connection modify wan ipv4.dns 127.0.0.1
-
+```
 
 Gateway Empty:
-
+```bash
 nmcli con show wan | grep ipv4.gateway
-
+```
 
 should look like this:
 
@@ -67,9 +68,9 @@ ipv4.gateway: --
 
 
 Ignore Auto Routes
-
+```bash
 nmcli con show wan | grep ipv4.ignore-auto-routes
-
+```
 
 should look like this:
 
@@ -77,12 +78,10 @@ ipv4.ignore-auto-routes: no
 
 
 Ignore Auto DNS
-
+```bash
 nmcli connection modify wan ipv4.ignore-auto-dns yes
-
-
 nmcli con show wan | grep ipv4.ignore-auto-dns
-
+```
 
 should look like this:
 
@@ -90,42 +89,36 @@ ipv4.ignore-auto-dns: yes
 
 
 Isolated NIC
-Connection Autoconnect
-
+```bash
 nmcli connection modify isolated connection.autoconnect yes
-
 nmcli connection show isolated | grep connection.autoconnect
-
+```
 Set DNS Address:
-
+```bash
 nmcli connection modify isolated ipv4.dns 127.0.0.1
-
 nmcli con show isolated | grep ipv4.dns
-
+```
 
 Set IP Address:
-
+```bash
 nmcli connection modify isolated ipv4.addresses 192.168.1.1/24
-
 nmcli con show isolated | grep ipv4.addresses
-
+```
 
 DNS Search
-
+```bash
 nmcli connection modify isolated ipv4.dns-search example.com
-
 nmcli connection show isolated | grep dns-search
-
+```
 
 Gateway
-
+```bash
 nmcli connection show isolated | grep ipv4.gateway
-
+```
 
 IPv4 Method:
-
+```bash
 nmcli connection modify isolated ipv4.method manual
-
 nmcli con show isolated | grep ipv4.method
 ```
 
