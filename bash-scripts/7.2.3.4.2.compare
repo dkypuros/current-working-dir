@@ -1,0 +1,21 @@
+connection.autoconnect:                 yes
+connection.autoconnect-priority:        0
+connection.autoconnect-retries:         -1 (default)
+connection.autoconnect-slaves:          -1 (default)
+ipv4.method:                            auto
+ipv4.gateway:                           --
+ipv4.ignore-auto-routes:                no
+ipv4.ignore-auto-dns:                   yes
+ipv4.addresses:                         192.168.1.1/24
+connection.autoconnect:                 yes
+connection.autoconnect-priority:        0
+connection.autoconnect-retries:         -1 (default)
+connection.autoconnect-slaves:          -1 (default)
+ipv4.dns:                               127.0.0.1
+ipv4.dns-search:                        example.com
+ipv4.dns-options:                       --
+ipv4.dns-priority:                      0
+ipv4.dns-search:                        example.com
+ipv6.dns-search:                        --
+ipv4.gateway:                           --
+ipv4.method:                            manual

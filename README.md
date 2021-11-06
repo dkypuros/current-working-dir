@@ -46,7 +46,7 @@ dnf install git -y
 mkdir /work_dir
 cd /work_dir
 git clone https://github.com/dkypuros/current-working-dir.git
-chmod +x current-working-dir/bash-scripts/*
+chmod +x /work_dir/current-working-dir/bash-scripts/*
 cd /work_dir/current-working-dir/bash-scripts/
 ./7.2.3.4.2.sh
 cd /work_dir/current-working-dir
