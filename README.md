@@ -3,12 +3,13 @@
 
 The purpose of these instructions is to walk through all 3 sections of the documentation (7.1, 7.2, and 7.3)
 
-- 7.1. PREPARING FOR BARE METAL CLUSTER INSTALLATION
+# 7.1. PREPARING FOR BARE METAL CLUSTER INSTALLATION
 >This is mainly informational
-- 7.2. INSTALLING A USER-PROVISIONED CLUSTER ON BARE METAL
->This is mainly informational
-- 7.2.3.4.2 Network Connectivity requirements
 
+# 7.2. INSTALLING A USER-PROVISIONED CLUSTER ON BARE METAL
+>This is mainly informational
+
+# 7.2.3.4.2 Network Connectivity requirements
 In this section we will host based networking via a CentOS "helper system" that will provide requisite networking services.
 
 The system will have 2 network interfaces configured as follows:
