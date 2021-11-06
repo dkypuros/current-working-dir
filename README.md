@@ -1,6 +1,14 @@
 # David's User Provisioned Infrastructure Bash Scripts for OpenShift
+The purpose of the scripts is to walk through every section of the documentation
 
-- [OpenShift 4 Bare Metal Install - User Provisioned Infrastructure (UPI)](#David's-User-Provisioned-Infrastructure-Bash-Scripts-for-OpenShift)
+- 7.1. PREPARING FOR BARE METAL CLUSTER INSTALLATION
+>This is mainly informational
+- 7.2. INSTALLING A USER-PROVISIONED CLUSTER ON BARE METAL
+>This is mainly informational
+- 7.2.3.5.1. Example DNS configuration for user-provisioned clusters
+
+
+===========================================================
 
 Red Hat OpenShift User Provisioned Infrastructure
 
@@ -18,7 +26,7 @@ Installation Steps
         ◦ master1 hardware ethernet 00:0c:29:8e:91:c2
         ◦ master2 hardware ethernet 00:0c:29:4e:e6:77
         ◦ worker0 hardware ethernet 00:0c:29:da:35:11
-        ◦ worker1 hardware ethernet 00:0c:29:3d:ea:c4;
+        ◦ worker1 hardware ethernet 00:0c:29:3d:ea:c4
 ## Part 1 - Host System: Libvirt Setup
     • Software install “libvirt” search
     • Configure “Networks” for Libvirt itself
