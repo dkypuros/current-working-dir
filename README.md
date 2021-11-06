@@ -3,10 +3,12 @@
 - [OpenShift 4 Bare Metal Install - User Provisioned Infrastructure (UPI)](#David's-User-Provisioned-Infrastructure-Bash-Scripts-for-OpenShift)
 
 Red Hat OpenShift User Provisioned Infrastructure
+
 Architecture
 I need a better quick networking architecture design. Maybe something like Ryan’s.
 Installation Steps
-Part 0 - “Pre” work or before you start configuration steps
+
+## Part 0 - “Pre” work or before you start configuration steps
     • CentOS ISO downloaded
     • Use the following for the MAC address of Test VM
         ◦ 52:54:00:8b:28:62
@@ -17,25 +19,27 @@ Part 0 - “Pre” work or before you start configuration steps
         ◦ master2 hardware ethernet 00:0c:29:4e:e6:77
         ◦ worker0 hardware ethernet 00:0c:29:da:35:11
         ◦ worker1 hardware ethernet 00:0c:29:3d:ea:c4;
-Part 1 - Host System: Libvirt Setup
+## Part 1 - Host System: Libvirt Setup
     • Software install “libvirt” search
     • Configure “Networks” for Libvirt itself
     • Install CentOS – “helper” vm
-Part 1.1 - Helper VM: NMCLI Setup
+## Part 1.1 - Helper VM: NMCLI Setup
 Configure network inside the “helper VM” or host level networking
     • nmcli “wan”
     • nmcli “isolated”
 file:[[nmcli-configuration]]
 file:[[firewall-zones]]
 *build according to architectural diagram
-Part 1.2 - Helper VM: Install Networking Services
+
+## Part 1.2 - Helper VM: Install Networking Services
 enable, start , stop
     • dhcp-server
     • bind bind-utils
     • wget
     • etc
 file:[[1.2.helper-vm-networking-services]]
-Part 1.3 - Helper VM: USB File Copy
+
+## Part 1.3 - Helper VM: USB File Copy
 Usb /location/ to “/xxx/xxx/xxx.conf”
 List of configuration files for viewing
     • configs > zones > db.example.com
@@ -53,7 +57,8 @@ Test via “test vm”
     • configure OS networking
     • reboot and make sure vm gets correct IP, and hostname from DHCP
 file:[[test-vm-config]]
-Part 2 - Following OCP PXE Instructions
+
+## Part 2 - Following OCP PXE Instructions
 Test DNS
 dig +noall +answer @192.168.1.1 api.ocp4.example.com
 should see: 
