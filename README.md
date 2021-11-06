@@ -5,10 +5,139 @@ The purpose of the scripts is to walk through every section of the documentation
 >This is mainly informational
 - 7.2. INSTALLING A USER-PROVISIONED CLUSTER ON BARE METAL
 >This is mainly informational
+- 7.2.3.4.2 Network Connectivity requirements
+
+In this section we will host based networking via a CentOS "helper system" that will provide requisite networking services.
+
+The system will have 2 network interfaces configured as follows:
+
+The "WAN" NIC directs traffic toward the internet
+
+```bash
+[root@helper ~]# nmcli con show
+
+NAME UUID TYPE DEVICE
+
+wan f3cca7c6-b9a6-45ed-bea0-b9afafdde095 ethernet enp1s0
+
+isolated 36ade008-902f-4954-b928-4c45c36d74c7 ethernet enp2s0
+
+
+How it works:
+
+nmcli connection modify wan setting.property value
+
+
+Name the connections:
+
+nmcli con modify enp2s0 connection.id isolated
+
+nmcli con modify enp1s0 connection.id wan
+
+
+Connection Autoconnect
+
+nmcli connection modify wan connection.autoconnect yes
+
+nmcli connection show wan | grep connection.autoconnect
+
+
+IPv4 Method:
+
+nmcli connection modify wan ipv4.method auto
+
+nmcli con show wan | grep ipv4.method
+
+
+DNS Localhost:
+
+nmcli connection modify wan ipv4.dns 127.0.0.1
+
+
+Gateway Empty:
+
+nmcli con show wan | grep ipv4.gateway
+
+
+should look like this:
+
+ipv4.gateway: --
+
+
+Ignore Auto Routes
+
+nmcli con show wan | grep ipv4.ignore-auto-routes
+
+
+should look like this:
+
+ipv4.ignore-auto-routes: no
+
+
+Ignore Auto DNS
+
+nmcli connection modify wan ipv4.ignore-auto-dns yes
+
+
+nmcli con show wan | grep ipv4.ignore-auto-dns
+
+
+should look like this:
+
+ipv4.ignore-auto-dns: yes
+
+
+Isolated NIC
+Connection Autoconnect
+
+nmcli connection modify isolated connection.autoconnect yes
+
+nmcli connection show isolated | grep connection.autoconnect
+
+Set DNS Address:
+
+nmcli connection modify isolated ipv4.dns 127.0.0.1
+
+nmcli con show isolated | grep ipv4.dns
+
+
+Set IP Address:
+
+nmcli connection modify isolated ipv4.addresses 192.168.1.1/24
+
+nmcli con show isolated | grep ipv4.addresses
+
+
+DNS Search
+
+nmcli connection modify isolated ipv4.dns-search example.com
+
+nmcli connection show isolated | grep dns-search
+
+
+Gateway
+
+nmcli connection show isolated | grep ipv4.gateway
+
+
+IPv4 Method:
+
+nmcli connection modify isolated ipv4.method manual
+
+nmcli con show isolated | grep ipv4.method
+```
+
 - 7.2.3.5.1. Example DNS configuration for user-provisioned clusters
 
 There are 3 DNS configuratoin files.
-1. ![named.conf](./configs/named.conf)
+1. named.conf
+2. /zones/db.example.com
+3. /zones/db.reverse
+
+7.2.3.6. Load balancing requirements for user-provisioned infrastructure
+
+
+
 
 ===========================================================
 
