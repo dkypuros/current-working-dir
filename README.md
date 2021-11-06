@@ -7,6 +7,8 @@ The purpose of the scripts is to walk through every section of the documentation
 >This is mainly informational
 - 7.2.3.5.1. Example DNS configuration for user-provisioned clusters
 
+There are 3 DNS configuratoin files.
+1. ![named.conf](./configs/named.conf)
 
 ===========================================================
 
