@@ -328,7 +328,9 @@ https://console.redhat.com/openshift/install
 ```bash
 mkdir /ocp_files
 cd /ocp_files
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-install-linux.tar.gz
 tar xvf openshift-install-linux.tar.gz
+touch pull-secret.txt
 ```
 
 ## 7.2.8. Installing the OpenShift CLI by downloading the binary
@@ -336,12 +338,77 @@ Download the OC CLI file on a local computer
 https://access.redhat.com/downloads/content/290
 
 ```bash
+dnf install tar -y
 cd /ocp_files
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
+tar xvzf openshift-client-linux.tar.gz
+echo $PATH
+mv oc /usr/local/bin
+mv kubectl /usr/local/bin
+oc version
+```
+Other Files to download
+```bash
+wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/rhcos-live.x86_64.iso
+wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/rhcos-metal.x86_64.raw.gz
+```
 
+## 7.2.9. Manually creating the installation configuration file
+For user-provisioned installations of OpenShift Container Platform, you manually generate your
+installation configuration file. Need Pull Secret, and SSH Public Key...
+
+``bash
+mkdir /installation-dir
+cd /installation-dir
+vim install-config.yaml
+```
+
+Update the install-config.yaml with your own pull-secret and ssh key.
+Line 23 should contain the contents of your pull-secret.txt
+
+```bash
+cat /installation-files/pull-secret.txt
+```
+
+Line 24 should contain the contents of your '~/.ssh/id_rsa.pub'
+
+```
+cat ~/.ssh/id_rsa.pub
+```
+
+## 7.2.9.2. Sample install-config.yaml file for bare metal
+use the following (formating in related file):
+
+```yaml
+apiVersion: v1
+baseDomain: example.com
+compute:
+  - hyperthreading: Enabled
+    name: worker
+    replicas: 0
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: 3
+metadata:
+  name: ocp4
+networking:
+  clusterNetwork:
+    - cidr: 10.128.0.0/14
+      hostPrefix: 23
+  networkType: OpenShiftSDN
+  serviceNetwork:
+    - 172.30.0.0/16
+platform:
+  none: {}
+fips: false
+pullSecret: 'XXXX'
+sshKey: 'XXX'
 ```
 
 ## Other
-```
+
+```bash
 systemctl enable nfs-server rpcbind
 systemctl enable tftp
 ```
