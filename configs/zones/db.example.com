@@ -1,12 +1,12 @@
 $TTL 1W
-@       IN      SOA             ns1.example.com. root (
-                2019070700      ; serial
-                3H              ; refresh (3 hours)
-                30M             ; retry (30 minutes)
-                2W              ; expiry (2 weeks)
-                1W )            ; minimum (1 week)
-IN      NS                      ns1.example.com.
-IN      MX 10                   smtp.example.com.
+@ IN SOA ns1.example.com. root (
+        2019070700 ; serial
+        3H ; refresh (3 hours)
+        30M ; retry (30 minutes)
+        2W ; expiry (2 weeks)
+        1W ) ; minimum (1 week)
+    IN NS ns1.example.com.
+    IN MX 10 smtp.example.com.
 ;
 ;
 ns1.example.com. IN A 192.168.1.5
@@ -28,3 +28,5 @@ master2.ocp4.example.com. IN A 192.168.1.99
 ;
 worker0.ocp4.example.com. IN A 192.168.1.11
 worker1.ocp4.example.com. IN A 192.168.1.7
+;
+;EOF
