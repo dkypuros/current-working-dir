@@ -678,29 +678,3 @@ cd /installation-dir
 ```
 
 After bootstrap process is complete, remove the bootstrap machine from the load balancer.
-
-### Errors ###
-
-**haproxy not working at time of boot**
-**hostnames not working**
-It sort of an interesting thought. Break stuff in order, and see what errors pop-up.
-```bash
-[root@helper installation-dir]# ./openshift-install --dir=/installation-dir wait-for bootstrap-complete --log-level=info
-
-INFO Waiting up to 20m0s for the Kubernetes API at https://api.ocp4.example.com:6443... 
-ERROR Attempted to gather ClusterOperator status after wait failure: listing ClusterOperator objects: Get "https://api.ocp4.example.com:6443/apis/config.openshift.io/v1/clusteroperators": dial tcp 192.168.1.5:6443: connect: no route to host 
-INFO Use the following commands to gather logs from the cluster 
-INFO openshift-install gather bootstrap --help    
-ERROR Bootstrap failed to complete: Get "https://api.ocp4.example.com:6443/version?timeout=32s": dial tcp 192.168.1.5:6443: connect: no route to host 
-ERROR Failed waiting for Kubernetes API. This error usually happens when there is a problem on the bootstrap host that prevents creating a temporary control plane. 
-FATAL Bootstrap failed to complete   
-```
-
-
-dig api.ocp4.example.com  | grep -A 2 ";; ANSWER SECTION:" # Should match: 192.168.1.5
-
-hostname issues
-
-sudo hostnamectl set-hostname bootstrap
-
-ssh core@bootstrap.ocp4.example.com
