@@ -511,7 +511,7 @@ INFO Ignition-Configs created in: . and auth
 
 ## 7.2.11. Installing RHCOS and starting the OpenShift Container Platform bootstrap process
 
-## 7.2.11.1. Installing RHCOS by using an ISO image - Using VMWare
+## 7.2.11.1. Installing RHCOS by using an ISO image - Testing Configs with VMWare
 
 I'll start with ISO installation first, then add PXE later.
 
