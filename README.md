@@ -506,6 +506,9 @@ INFO Ignition-Configs created in: . and auth
 ```
 
 ## 7.2.11. Installing RHCOS and starting the OpenShift Container Platform bootstrap process
+
+## 7.2.11.1. Installing RHCOS by using an ISO image (Test ISO installation)
+
 You can configure RHCOS during ISO and PXE installations. Both options need a webserver, so we will set this up now.
 
 ```bash
@@ -530,10 +533,30 @@ systemctl stop httpd
 systemctl start httpd
 ```
 
-From the installation host, validate that the Ignition config files are available on the URLs. The following example gets the Ignition config file for the bootstrap node.
+From the installation host, validate that the Ignition config files are available on the URLs.
 
 ```
 curl -k http://192.168.1.1:8080/ocp4/bootstrap.ign
 curl -k http://192.168.1.1:8080/ocp4/master.ign
 curl -k http://192.168.1.1:8080/ocp4/worker.ign
+```
+
+The RHCOS images that are required for the ISO method of installing operating system instances were downloaded earlier in these instructions.
+
+RHCOS ISO Image name: rhcos-live.x86_64.iso
+
+```bash
+tree /ocp_files/
+```
+
+I'm going to test the ISO outside of the "helper" system by re-downloading the file and using it in VMWare ESXi.
+
+1. Use the ISO to start the RHCOS installation.
+2. Boot the RHCOS ISO image without specifying any options or interrupting the live boot sequence. Wait for the installer to boot into a shell prompt in the RHCOS live environment.
+3. Run the coreos-installer command and specify the options that meet your installation requirements.
+
+coreos-installer command
+
+```bash
+sudo coreos-installer install --ignition-url=http://<HTTP_server>/<node_type>.ign <device> --ignition-hash=SHA512-<digest>
 ```
