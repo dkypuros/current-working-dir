@@ -519,14 +519,20 @@ Upload the bootstrap, control plane, and compute node Ignition config files that
 
 ```bash
 mkdir /var/www/html/ocp4
-cp /installation-dir/bootstrap.ign /var/www/html/ocp4/
-cp /installation-dir/master.ign /var/www/html/ocp4/
-cp /installation-dir/worker.ign /var/www/html/ocp4/
+ll /installation-dir/
+cp /installation-dir/*.ign /var/www/html/ocp4/
+ll /var/www/html/ocp4/
 
 chcon -R -t httpd_sys_content_t /var/www/html/ocp4/
 chown -R apache: /var/www/html/ocp4/
 chmod 755 /var/www/html/ocp4/
+systemctl stop httpd
+systemctl start httpd
+```
 
+From the installation host, validate that the Ignition config files are available on the URLs. The following example gets the Ignition config file for the bootstrap node.
+
+```
 curl -k http://192.168.1.1:8080/ocp4/bootstrap.ign
 curl -k http://192.168.1.1:8080/ocp4/master.ign
 curl -k http://192.168.1.1:8080/ocp4/worker.ign
