@@ -343,9 +343,10 @@ cd /ocp_files
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
 tar xvzf openshift-client-linux.tar.gz
 echo $PATH
-mv oc /usr/local/bin
-mv kubectl /usr/local/bin
+cp oc /usr/local/bin
+cp kubectl /usr/local/bin
 oc version
+kubectl version
 ```
 Other Files to download
 ```bash
@@ -357,7 +358,7 @@ wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/lat
 For user-provisioned installations of OpenShift Container Platform, you manually generate your
 installation configuration file. Need Pull Secret, and SSH Public Key...
 
-``bash
+```bash
 mkdir /installation-dir
 cd /installation-dir
 vim install-config.yaml
