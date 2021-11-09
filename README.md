@@ -551,6 +551,11 @@ tree /ocp_files/
 
 I'm going to test the ISO outside of the "helper" system by re-downloading the file and using it in VMWare ESXi.
 
+The file is available here for a local download, VMWare test.
+```bash
+wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/rhcos-live.x86_64.iso
+```
+
 1. Use the ISO to start the RHCOS installation.
 2. Boot the RHCOS ISO image without specifying any options or interrupting the live boot sequence. Wait for the installer to boot into a shell prompt in the RHCOS live environment.
 3. Run the coreos-installer command and specify the options that meet your installation requirements.
@@ -558,7 +563,8 @@ I'm going to test the ISO outside of the "helper" system by re-downloading the f
 Obtain the SHA512 digest and save it somewhere. 
 
 ```bash
-sha512sum /installation-dir/bootstrap.ign
+cd /installation-dir
+sha512sum bootstrap.ign
 ```
 
 Make a note of the disk name or "device" that you think vmware will use during the boot process of a new system.
