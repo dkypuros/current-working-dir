@@ -506,3 +506,28 @@ INFO Ignition-Configs created in: . and auth
 ```
 
 ## 7.2.11. Installing RHCOS and starting the OpenShift Container Platform bootstrap process
+You can configure RHCOS during ISO and PXE installations. Both options need a webserver, so we will set this up now.
+
+```bash
+rpm -qa httpd
+systemctl enable httpd
+systemctl start httpd
+systemctl status httpd
+```
+
+Upload the bootstrap, control plane, and compute node Ignition config files that the installation program created to your HTTP server. Note the URLs of these files.
+
+```bash
+mkdir /var/www/html/ocp4
+cp /installation-dir/bootstrap.ign /var/www/html/ocp4/
+cp /installation-dir/master.ign /var/www/html/ocp4/
+cp /installation-dir/worker.ign /var/www/html/ocp4/
+
+chcon -R -t httpd_sys_content_t /var/www/html/ocp4/
+chown -R apache: /var/www/html/ocp4/
+chmod 755 /var/www/html/ocp4/
+
+curl -k http://192.168.1.1:8080/ocp4/bootstrap.ign
+curl -k http://192.168.1.1:8080/ocp4/master.ign
+curl -k http://192.168.1.1:8080/ocp4/worker.ign
+```
