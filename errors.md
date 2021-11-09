@@ -50,3 +50,6 @@ The story of DHCP and hostnames
 More Info from Redhat.com
 https://www.redhat.com/sysadmin/set-hostname-linux
 
+
+ssh core@bootstrap.ocp4.example.com
+
