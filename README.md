@@ -504,3 +504,5 @@ INFO Ignition-Configs created in: . and auth
 
 1 directory, 7 files
 ```
+
+## 7.2.11. Installing RHCOS and starting the OpenShift Container Platform bootstrap process
