@@ -1,0 +1,30 @@
+
+host bootstrap {
+ hardware ethernet 52:54:00:8b:28:62;
+ fixed-address 192.168.1.200;
+}
+
+host master0 {
+ hardware ethernet 00:0c:29:65:d5:0f;
+ fixed-address 192.168.22.201;
+}
+
+host master1 {
+ hardware ethernet 00:0c:29:8e:91:c2;
+ fixed-address 192.168.22.202;
+}
+
+host master2 {
+ hardware ethernet 00:0c:29:4e:e6:77;
+ fixed-address 192.168.22.203;
+}
+
+host worker0 {
+ hardware ethernet 00:0c:29:da:35:11;
+ fixed-address 192.168.22.211;
+}
+
+host worker1 {
+ hardware ethernet 00:0c:29:3d:ea:c4;
+ fixed-address 192.168.22.212;
+}

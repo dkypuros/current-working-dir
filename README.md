@@ -507,7 +507,9 @@ INFO Ignition-Configs created in: . and auth
 
 ## 7.2.11. Installing RHCOS and starting the OpenShift Container Platform bootstrap process
 
-## 7.2.11.1. Installing RHCOS by using an ISO image (Test ISO installation)
+## 7.2.11.1. Installing RHCOS by using an ISO image - Using VMWare
+
+I'll start with ISO installation first, then add PXE later.
 
 You can configure RHCOS during ISO and PXE installations. Both options need a webserver, so we will set this up now.
 
@@ -608,5 +610,41 @@ ssh core@worker0.ocp4.example.com
 ssh core@worker1.ocp4.example.com
 ```
 
-==========
-Go back and do the whole MAC address thing
+**Prepare VMs**
+Instructions unique to testing ISO installation of VMware environment to simulate bare metal, and test configurations.
+
+Create 3/2/1 control plane vm's
+
+3 Control Plane nodes:
+* master0
+* master1
+* master2
+
+2 Worker nodes:
+* worker0
+* worker1
+
+1 Bootstrap
+* bootstrap*
+
+VM settings:
+* 4 vCPU, 8GB ram, 50GB disk, network=OCP
+
+ISO to use:
+* rhcos-live.x86_64.iso
+
+## 7.2.11.2. Installing RHCOS by using PXE or iPXE booting
+
+## 7.2.11.3. Advanced RHCOS installation configuration
+Fun to try on a rainy day.
+
+## 7.2.12. Waiting for the bootstrap process to complete
+The configuration information provided through the Ignition config files is used to initialize the bootstrap process and install OpenShift Container Platform on the machines.
+
+```bash
+cd /installation-dir
+./openshift-install --dir=installation-dir wait-for bootstrap-complete --log-level=info
+```
+
+After bootstrap process is complete, remove the bootstrap machine from the load balancer.
+
