@@ -192,6 +192,9 @@ external (active)
 ```bash
 dnf install bind bind-utils dhcp-server httpd haproxy nfs-utils wget tftp-server syslinux vim -y
 ```
+
+## 7.2.3.5.1. Example DNS configuration for user-provisioned clusters
+
 ```bash
 systemctl enable named
 vim /etc/named.conf
@@ -202,7 +205,6 @@ systemctl start named
 systemctl status named
 systemctl stop named
 ```
-## 7.2.3.5.1. Example DNS configuration for user-provisioned clusters
 
 paste from files on Hive - local directory - Visual Studio
 
@@ -258,6 +260,7 @@ ls /etc/haproxy/haproxy.cfg
 vim /etc/haproxy/haproxy.cfg
 ```
 _copy config files from local drive_
+
 ```bash
 firewall-cmd --add-port=6443/tcp --zone=internal --permanent # kube-api-server on control plane nodes
 firewall-cmd --add-port=6443/tcp --zone=external --permanent # kube-api-server on control plane nodes
@@ -270,6 +273,7 @@ firewall-cmd --add-port=9000/tcp --zone=external --permanent # HAProxy Stats
 firewall-cmd --reload
 
 setsebool -P haproxy_connect_any 1
+systemctl enable haproxy
 systemctl start haproxy
 systemctl status haproxy
 ```
@@ -590,8 +594,9 @@ wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/lat
 
 ```bash
 vim /etc/dhcp/dhcpd.conf
-vim /etc/dhcp/dhcpd.conf
-vim /etc/dhcp/dhcpd.conf
+systemctl stop dhcpd
+systemctl start dhcpd
+systemctl status dhcpd
 ```
 
 **Build the CoreOS Installer command**
@@ -617,10 +622,22 @@ Using the following disk (<device>) name:
 The --ignition-hash option is required when the Ignition config file is obtained through an HTTP URL to validate the authenticity of the Ignition config file on the cluster node.
 
 ```bash
-sudo coreos-installer install --ignition-url=http://192.168.1.1:8080/ocp4/bootstrap.ign /dev/sda --ignition-hash=SHA512-db2186feed298f338ccc386097fccd6ada7e156cd2384318909878fa539eadd794dc9ea79c665c72213287c7affb025031b872a07e8881fb9bb5c71571e38825
+sudo coreos-installer install --ignition-url=http://192.168.1.1:8080/ocp4/bootstrap.ign /dev/sda --insecure-ignition
+
+sudo coreos-installer install --ignition-url=http://192.168.1.1:8080/ocp4/master.ign /dev/sda --insecure-ignition
+
+sudo coreos-installer install --ignition-url=http://192.168.1.1:8080/ocp4/worker.ign /dev/sda --insecure-ignition
 ```
 
 **Kick OFF ISO install and monitor the Progress**
+Before boot, verify all services are running:
+```bash
+systemctl status named
+systemctl status dhcpd
+systemctl status haproxy
+systemctl status httpd
+```
+
 Monitor the progress of the RHCOS installation on the console of the machine. Be sure that the installation is successful on each node before commencing with
 the OpenShift Container Platform installation. Observing the installation process can also help to determine the cause of RHCOS installation issues that might arise.
 
@@ -648,6 +665,7 @@ ssh core@worker1.ocp4.example.com
 ## 7.2.11.2. Installing RHCOS by using PXE or iPXE booting
 
 ## 7.2.11.3. Advanced RHCOS installation configuration
+## 7.2.11.3.3.1. Embedding a live install Ignition config in the RHCOS ISO
 Fun to try on a rainy day.
 
 ## 7.2.12. Waiting for the bootstrap process to complete
@@ -655,8 +673,25 @@ The configuration information provided through the Ignition config files is used
 
 ```bash
 cd /installation-dir
-./openshift-install --dir=installation-dir wait-for bootstrap-complete --log-level=info
+./openshift-install --dir=/installation-dir wait-for bootstrap-complete --log-level=info
 ```
 
 After bootstrap process is complete, remove the bootstrap machine from the load balancer.
 
+### Errors ###
+
+**haproxy not working at time of boot**
+It sort of an interesting thought. Break stuff in order, and see what errors pop-up.
+```bash
+[root@helper installation-dir]# ./openshift-install --dir=/installation-dir wait-for bootstrap-complete --log-level=info
+
+INFO Waiting up to 20m0s for the Kubernetes API at https://api.ocp4.example.com:6443... 
+ERROR Attempted to gather ClusterOperator status after wait failure: listing ClusterOperator objects: Get "https://api.ocp4.example.com:6443/apis/config.openshift.io/v1/clusteroperators": dial tcp 192.168.1.5:6443: connect: no route to host 
+INFO Use the following commands to gather logs from the cluster 
+INFO openshift-install gather bootstrap --help    
+ERROR Bootstrap failed to complete: Get "https://api.ocp4.example.com:6443/version?timeout=32s": dial tcp 192.168.1.5:6443: connect: no route to host 
+ERROR Failed waiting for Kubernetes API. This error usually happens when there is a problem on the bootstrap host that prevents creating a temporary control plane. 
+FATAL Bootstrap failed to complete   
+```
+
+dig api.ocp4.example.com  | grep -A 2 ";; ANSWER SECTION:" # Should match: 192.168.1.5
