@@ -511,6 +511,8 @@ INFO Ignition-Configs created in: . and auth
 
 I'll start with ISO installation first, then add PXE later.
 
+**File Hosting**
+
 You can configure RHCOS during ISO and PXE installations. Both options need a webserver, so we will set this up now.
 
 ```bash
@@ -543,24 +545,46 @@ curl -k http://192.168.1.1:8080/ocp4/master.ign
 curl -k http://192.168.1.1:8080/ocp4/worker.ign
 ```
 
-The RHCOS images that are required for the ISO method of installing operating system instances were downloaded earlier in these instructions.
+**Review the files that are needed fro installation**
 
-RHCOS ISO Image name: rhcos-live.x86_64.iso
+RHCOS ISO Image name from earlier steps: rhcos-live.x86_64.iso
 
 ```bash
 tree /ocp_files/
 ```
 
-I'm going to test the ISO outside of the "helper" system by re-downloading the file and using it in VMWare ESXi.
+**Preparing the VMware VMs**
 
-The file is available here for a local download, VMWare test.
+
+**Prepare VMs and Gather MAC Addresses**
+Instructions unique to testing ISO installation of VMware environment to simulate bare metal, and test configurations.
+
+Create 3/2/1 control plane vm's
+
+3 Control Plane nodes:
+* master0
+* master1
+* master2
+
+2 Worker nodes:
+* worker0
+* worker1
+
+1 Bootstrap
+* bootstrap
+
+VM settings:
+* 4 vCPU, 8GB ram, 50GB disk, network=OCP
+
+ISO to use:
+* rhcos-live.x86_64.iso
+
+Local install of ISO
 ```bash
 wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/rhcos-live.x86_64.iso
 ```
 
-1. Use the ISO to start the RHCOS installation.
-2. Boot the RHCOS ISO image without specifying any options or interrupting the live boot sequence. Wait for the installer to boot into a shell prompt in the RHCOS live environment.
-3. Run the coreos-installer command and specify the options that meet your installation requirements.
+**Build the CoreOS Installer command**
 
 Obtain the SHA512 digest and save it somewhere. 
 
@@ -580,16 +604,17 @@ Using the following disk (<device>) name:
 /dev/sda
 ```
 
-
-**coreos-installer command**
 The --ignition-hash option is required when the Ignition config file is obtained through an HTTP URL to validate the authenticity of the Ignition config file on the cluster node.
 
 ```bash
 sudo coreos-installer install --ignition-url=http://192.168.1.1:8080/ocp4/bootstrap.ign /dev/sda --ignition-hash=SHA512-db2186feed298f338ccc386097fccd6ada7e156cd2384318909878fa539eadd794dc9ea79c665c72213287c7affb025031b872a07e8881fb9bb5c71571e38825
 ```
 
+**Kick OFF ISO install and monitor the Progress**
 Monitor the progress of the RHCOS installation on the console of the machine. Be sure that the installation is successful on each node before commencing with
 the OpenShift Container Platform installation. Observing the installation process can also help to determine the cause of RHCOS installation issues that might arise.
+
+(see 7.2.12 below for options.)
 
 After RHCOS installs, the system reboots. During the system reboot, it applies the Ignition config file that you specified.
 
@@ -609,29 +634,6 @@ ssh core@master2.ocp4.example.com
 ssh core@worker0.ocp4.example.com
 ssh core@worker1.ocp4.example.com
 ```
-
-**Prepare VMs**
-Instructions unique to testing ISO installation of VMware environment to simulate bare metal, and test configurations.
-
-Create 3/2/1 control plane vm's
-
-3 Control Plane nodes:
-* master0
-* master1
-* master2
-
-2 Worker nodes:
-* worker0
-* worker1
-
-1 Bootstrap
-* bootstrap*
-
-VM settings:
-* 4 vCPU, 8GB ram, 50GB disk, network=OCP
-
-ISO to use:
-* rhcos-live.x86_64.iso
 
 ## 7.2.11.2. Installing RHCOS by using PXE or iPXE booting
 
