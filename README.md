@@ -555,8 +555,52 @@ I'm going to test the ISO outside of the "helper" system by re-downloading the f
 2. Boot the RHCOS ISO image without specifying any options or interrupting the live boot sequence. Wait for the installer to boot into a shell prompt in the RHCOS live environment.
 3. Run the coreos-installer command and specify the options that meet your installation requirements.
 
-coreos-installer command
+Obtain the SHA512 digest and save it somewhere. 
 
 ```bash
-sudo coreos-installer install --ignition-url=http://<HTTP_server>/<node_type>.ign <device> --ignition-hash=SHA512-<digest>
+sha512sum /installation-dir/bootstrap.ign
 ```
+
+Make a note of the disk name or "device" that you think vmware will use during the boot process of a new system.
+
+```bash
+fdisk -l
+```
+
+Using the following disk (<device>) name:
+```
+/dev/sda
+```
+
+
+**coreos-installer command**
+The --ignition-hash option is required when the Ignition config file is obtained through an HTTP URL to validate the authenticity of the Ignition config file on the cluster node.
+
+```bash
+sudo coreos-installer install --ignition-url=http://192.168.1.1:8080/ocp4/bootstrap.ign /dev/sda --ignition-hash=SHA512-db2186feed298f338ccc386097fccd6ada7e156cd2384318909878fa539eadd794dc9ea79c665c72213287c7affb025031b872a07e8881fb9bb5c71571e38825
+```
+
+Monitor the progress of the RHCOS installation on the console of the machine. Be sure that the installation is successful on each node before commencing with
+the OpenShift Container Platform installation. Observing the installation process can also help to determine the cause of RHCOS installation issues that might arise.
+
+After RHCOS installs, the system reboots. During the system reboot, it applies the Ignition config file that you specified.
+
+Continue to create the other machines for your cluster.
+
+Create the bootstrap and control plane machines at this time. The control plane machines are not schedulable, so we are creating two compute machines to complete the installation of OCP.
+
+The required network, DNS, and load balancer infrastructure is in place and tested so the OpenShift Container Platform bootstrap process will begin automatically after the RHCOS nodes have rebooted.
+
+**Login to CoreOS nodes**
+
+```
+ssh core@bootstrap.ocp4.example.com
+ssh core@master0.ocp4.example.com
+ssh core@master1.ocp4.example.com
+ssh core@master2.ocp4.example.com
+ssh core@worker0.ocp4.example.com
+ssh core@worker1.ocp4.example.com
+```
+
+==========
+Go back and do the whole MAC address thing
