@@ -30,6 +30,23 @@ I'm looking at this currently
 
 https://access.redhat.com/documentation/en-us/openshift_container_platform/4.8/html-single/installing/index#ipi-install-troubleshooting
 
+Hostname Resolution: Check the cluster nodes to ensure they have a fully qualified domain name, and not just localhost.localdomain. For example:
+
 ```bash
+hostname
+
+hostnamectl set-hostname <hostname>
 
 ```
+
+specific error from rhcoreos
+```bash
+I manually set the hostname, and the changes didn't seem to persist. Still same errors.read udf 192.168.1.1:44327 -> 192.168.1.1:53 no route to host.
+```
+
+The story of DHCP and hostnames
+> But, as the man dhcpd.conf says: It should be noted here that most DHCP clients completely ignore the host-name option sent by the DHCP server, and  here is no way to configure them not to do this. So you generally have a choice of either not having any hostname to client IP address mapping that the  client will recognize, or doing DNS updates. 
+
+More Info from Redhat.com
+https://www.redhat.com/sysadmin/set-hostname-linux
+

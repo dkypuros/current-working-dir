@@ -681,6 +681,7 @@ After bootstrap process is complete, remove the bootstrap machine from the load 
 ### Errors ###
 
 **haproxy not working at time of boot**
+**hostnames not working**
 It sort of an interesting thought. Break stuff in order, and see what errors pop-up.
 ```bash
 [root@helper installation-dir]# ./openshift-install --dir=/installation-dir wait-for bootstrap-complete --log-level=info
@@ -695,3 +696,7 @@ FATAL Bootstrap failed to complete
 ```
 
 dig api.ocp4.example.com  | grep -A 2 ";; ANSWER SECTION:" # Should match: 192.168.1.5
+
+hostname issues
+
+sudo hostnamectl set-hostname bootstrap
