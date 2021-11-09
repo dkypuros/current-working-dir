@@ -409,18 +409,19 @@ sshKey: 'XXX'
 
 ## 7.2.10. Creating the Kubernetes manifest and Ignition config files
 
-Change to the directory that contains the OpenShift Container Platform installation program.
+Copy the OpenShift Container Platform installation program to the folder you will run the installation from (e.g. /installation-dir).
+
+```bash
+cp /ocp_files/openshift-install /installation-dir/
+```
+
 The “/installation-dir” must contain the “install-config.yaml” file
 
 ```bash
-./openshift-install create manifests --dir=/installation-dir
-```
-
-or
-
-```bash
 cd /installation-dir
+ll
 ./openshift-install create manifests
+ll
 ```
 
 View files that have been created so far
@@ -436,6 +437,70 @@ Remove the Kubernetes manifest files that define the control plane machines. By 
 rm -f /installation-dir/openshift/99_openshift-cluster-api_master-machines-*.yaml
 ```
 
-Check that the mastersSchedulable parameter in the
-<installation_directory>/manifests/cluster-scheduler-02-config.yml Kubernetes manifest
+Check that the mastersSchedulable parameter in the "/installation-dir//manifests/cluster-scheduler-02-config.yml" Kubernetes manifest
 file is set to false.
+
+```bash
+vim /installation-dir//manifests/cluster-scheduler-02-config.yml
+```
+
+**Create Ignition Configuration Files**
+To create the Ignition configuration files, run the following command from the directory that contains the installation program. Ignition config files are created for the bootstrap, control plane, and compute nodes in the installation directory.
+
+```bash
+cd /installation-dir
+tree
+./openshift-install create ignition-configs
+tree
+```
+
+Before
+```bash
+├── manifests
+│   ├── 04-openshift-machine-config-operator.yaml
+│   ├── cluster-config.yaml
+│   ├── cluster-dns-02-config.yml
+│   ├── cluster-infrastructure-02-config.yml
+│   ├── cluster-ingress-02-config.yml
+│   ├── cluster-network-01-crd.yml
+│   ├── cluster-network-02-config.yml
+│   ├── cluster-proxy-01-config.yaml
+│   ├── cluster-scheduler-02-config.yml
+│   ├── cvo-overrides.yaml
+│   ├── kube-cloud-config.yaml
+│   ├── kube-system-configmap-root-ca.yaml
+│   ├── machine-config-server-tls-secret.yaml
+│   ├── openshift-config-secret-pull-secret.yaml
+│   └── openshift-kubevirt-infra-namespace.yaml
+├── openshift
+│   ├── 99_kubeadmin-password-secret.yaml
+│   ├── 99_openshift-cluster-api_master-user-data-secret.yaml
+│   ├── 99_openshift-cluster-api_worker-user-data-secret.yaml
+│   ├── 99_openshift-machineconfig_99-master-ssh.yaml
+│   ├── 99_openshift-machineconfig_99-worker-ssh.yaml
+│   └── openshift-install-manifests.yaml
+└── openshift-install
+```
+
+after
+```bash
+[root@helper installation-dir]# ./openshift-install create ignition-configs
+INFO Consuming OpenShift Install (Manifests) from target directory 
+INFO Consuming Openshift Manifests from target directory 
+INFO Consuming Worker Machines from target directory 
+INFO Consuming Common Manifests from target directory 
+INFO Consuming Master Machines from target directory 
+INFO Ignition-Configs created in: . and auth      
+[root@helper installation-dir]# tree
+.
+├── auth
+│   ├── kubeadmin-password
+│   └── kubeconfig
+├── bootstrap.ign
+├── master.ign
+├── metadata.json
+├── openshift-install
+└── worker.ign
+
+1 directory, 7 files
+```
