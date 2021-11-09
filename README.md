@@ -584,6 +584,16 @@ Local install of ISO
 wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/rhcos-live.x86_64.iso
 ```
 
+* Load the rhcos-X.X.X-x86_64-installer.x86_64.iso image into the boot drive.
+* Use the VMware ESXi dashboard to record the MAC address of each vm
+* update the dhcpd.conf with MAC addresses
+
+```bash
+vim /etc/dhcp/dhcpd.conf
+vim /etc/dhcp/dhcpd.conf
+vim /etc/dhcp/dhcpd.conf
+```
+
 **Build the CoreOS Installer command**
 
 Obtain the SHA512 digest and save it somewhere. 
