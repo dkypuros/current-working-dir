@@ -407,9 +407,35 @@ pullSecret: 'XXXX'
 sshKey: 'XXX'
 ```
 
-## Other
+## 7.2.10. Creating the Kubernetes manifest and Ignition config files
+
+Change to the directory that contains the OpenShift Container Platform installation program.
+The “/installation-dir” must contain the “install-config.yaml” file
 
 ```bash
-systemctl enable nfs-server rpcbind
-systemctl enable tftp
+./openshift-install create manifests --dir=/installation-dir
 ```
+
+or
+
+```bash
+cd /installation-dir
+./openshift-install create manifests
+```
+
+View files that have been created so far
+
+```bash
+tree /installation-dir/
+tree /ocp_files
+```
+
+Remove the Kubernetes manifest files that define the control plane machines. By removing these files, you prevent the cluster from automatically generating control plane machines. I didn’t notice anything was deleted.
+
+```bash
+rm -f /installation-dir/openshift/99_openshift-cluster-api_master-machines-*.yaml
+```
+
+Check that the mastersSchedulable parameter in the
+<installation_directory>/manifests/cluster-scheduler-02-config.yml Kubernetes manifest
+file is set to false.
