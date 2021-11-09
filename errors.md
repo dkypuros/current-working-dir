@@ -22,6 +22,14 @@ api.ocp4.example.com.	604800	IN	A	192.168.1.5
 \;; ANSWER SECTION:
 5.1.168.192.in-addr.arpa. 604800 IN	PTR	api.ocp4.example.com.
 5.1.168.192.in-addr.arpa. 604800 IN	PTR	api-int.ocp4.example.com.
+```
 
+I'm looking at this currently
+
+## 8.6.5. The API is not accessible
+
+https://access.redhat.com/documentation/en-us/openshift_container_platform/4.8/html-single/installing/index#ipi-install-troubleshooting
+
+```bash
 
 ```
