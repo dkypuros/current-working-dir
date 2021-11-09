@@ -12,7 +12,7 @@ ERROR Failed waiting for Kubernetes API. This error usually happens when there i
 FATAL Bootstrap failed to complete   
 ```
 
-DNS Checking
+DNS Looks OK
 ```bash
 [root@helper installation-dir]# dig api.ocp4.example.com  | grep -A 2 ";; ANSWER SECTION:" # Should match: 192.168.1.5
 ;; ANSWER SECTION:
