@@ -629,6 +629,7 @@ sudo coreos-installer install --ignition-url=http://192.168.1.1:8080/ocp4/master
 sudo coreos-installer install --ignition-url=http://192.168.1.1:8080/ocp4/worker.ign /dev/sda --insecure-ignition
 ```
 
+
 **Kick OFF ISO install and monitor the Progress**
 Before boot, verify all services are running:
 ```bash
@@ -695,8 +696,11 @@ ERROR Failed waiting for Kubernetes API. This error usually happens when there i
 FATAL Bootstrap failed to complete   
 ```
 
+
 dig api.ocp4.example.com  | grep -A 2 ";; ANSWER SECTION:" # Should match: 192.168.1.5
 
 hostname issues
 
 sudo hostnamectl set-hostname bootstrap
+
+ssh core@bootstrap.ocp4.example.com
