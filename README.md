@@ -26,11 +26,13 @@ The "WAN" NIC directs traffic toward the internet
 ```bash
 nmcli con show
 ```
-**Bash variables**
+Set Bash variables
+```bash
 wan=ens192
 echo $wan
 isolated=ens224
 echo $isolated
+```
 
 _DRAFT_
 
@@ -43,9 +45,6 @@ chmod +x /work_dir/current-working-dir/bash-scripts/*
 cd /work_dir/current-working-dir/bash-scripts/
 ./7.2.3.4.2.sh
 ```
-
-How it works:
-nmcli connection modify wan setting.property value
 
 Connection Autoconnect
 ```bash
