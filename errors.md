@@ -69,7 +69,18 @@ Review status of the vm once I reboot VM in state 0.
 Device is still empty.
 
 Remove the Network Adapter 2 from ESXi, and power on. Review nmcli connnection information. Is it gone? No. That's strange.
-I'm deleting the whole VM. 
+I'm deleting the whole VM, and re-installing CentOS 8. Nope, still have an empty device.
+I'm deleting the whole VM and OCP network. 
+Recreating the VM, and during the install turning on both NICs. I'm also installing the full GUI server.
 
+...that worked.
+
+```bash
+[root@helper ~]# nmcli con show
+NAME    UUID                                  TYPE      DEVICE 
+ens192  0a19ddd1-2624-41a4-b8ae-f09dd4f3c43d  ethernet  ens192 
+ens224  ddbff163-5c7b-4263-a195-387f923973d1  ethernet  ens224 
+virbr0  b677997e-ee87-4d7d-970f-2941d9524fd4  bridge    virbr0 
+```
 
 
