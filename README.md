@@ -20,13 +20,15 @@ ssh root@192.168.0.159
 ### The "nmcli" work
 ...
 **Part 1 - The WAN NIC portion**
-
 The "WAN" NIC directs traffic toward the internet
+
+Make sure that the system has two active "Network Devices". You should not see any "--" empty settings for the device.
 
 ```bash
 nmcli con show
+
 ```
-Set Bash variables
+Set Bash variables for use with generic commands below. 
 ```bash
 wan=ens192
 echo $wan
@@ -135,6 +137,7 @@ nmcli con show $isolated | grep ipv4.method
 
 ### Using firewalld as a "traffic forwarder"
 ```bash
+systemctl status firewalld
 nmcli connection modify $wan connection.zone external
 nmcli connection modify $isolated connection.zone internal
 

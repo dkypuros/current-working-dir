@@ -1,5 +1,5 @@
 
-Error
+## First Error (system MicroCenter Build)
 ```bash
 [root@helper installation-dir]# ./openshift-install --dir=/installation-dir wait-for bootstrap-complete --log-level=info
 
@@ -52,4 +52,24 @@ https://www.redhat.com/sysadmin/set-hostname-linux
 
 
 ssh core@bootstrap.ocp4.example.com
+
+
+
+## Second Error (Dell R710)
+
+Device ens224 is showing blank.
+```bash
+root@helper ~]# nmcli con show
+NAME    UUID                                  TYPE      DEVICE 
+ens192  6cd49951-a09a-4c22-a8c8-028e9d394ad9  ethernet  ens192 
+ens224  fa699e0a-d92a-4ace-8de2-9268ef7938f9  ethernet  --     
+```
+Take VM back to state 0.
+Review status of the vm once I reboot VM in state 0.
+Device is still empty.
+
+Remove the Network Adapter 2 from ESXi, and power on. Review nmcli connnection information. Is it gone? No. That's strange.
+I'm deleting the whole VM. 
+
+
 
