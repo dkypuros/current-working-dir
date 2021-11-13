@@ -278,6 +278,8 @@ systemctl status haproxy
 
 ## 7.2.4. Preparing the user-provisioned infrastructure
 All the MAC addresses in the dhcpd.conf file are from booting up VMs and shutting them down quickly, and gathering the details.
+(Instructions)
+[MAC Gathering Instructions](https://github.com/dkypuros/current-working-dir/blob/master/configs/gather-MAC-addresses.md)
 
 ```bash
 systemctl enable dhcpd
@@ -293,7 +295,8 @@ systemctl status dhcpd
 ```bash
 dig +noall +answer @192.168.1.1 api.ocp4.example.com # Should see: api.ocp4.example.com. 604800 IN A 192.168.1.5
 dig +noall +answer @192.168.1.1 api-int.ocp4.example.com # Should see: api-int.ocp4.example.com. 604800 IN A 192.168.1.5
-dig +noall +answer @192.168.1.1 random.apps.ocp4.example.com # Should see: random.apps.ocp4.example.com. 604800 IN A 192.168.1.5
+dig +noall +answer @192.168.1.1 random.apps.ocp4.example.com # Should see:
+ random.apps.ocp4.example.com. 604800 IN A 192.168.1.5
 
 dig +noall +answer @192.168.1.1 console-openshift-console.apps.ocp4.example.com
 should see:
