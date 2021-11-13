@@ -76,14 +76,43 @@ INFO Pull failed. Retrying quay.io/openshift-release-dev/ocp-release@sha256:386f
 INFO Error: Error initializing source docker://quay.io/openshift-release-dev/ocp-release@sha256:386f4e08c48d01e0c73d294a88bb64fac3284d1d16a5b8938deb3b8699825a88: error pinging docker registry quay.io: Get "https://quay.io/v2/": dial tcp: lookup quay.io on 192.168.1.1:53: read udp 192.168.1.96:40590->192.168.1.1:53: read: no route to host 
 ```
 
-Found an error, I can't ping "quay.io" from the bootstrap node.
+Found an error, I can't ping "quay.io" from the bootstrap node. Networking issues in general.
+
 ```bash
 ssh core@bootstrap.ocp4.example.com
 
 [core@bootstrap ~]$ ping quay.io
 ping: quay.io: Name or service not known
 
+[core@bootstrap ~]$ ping master0.ocp4.example.com
+ping: master0.ocp4.example.com: Name or service not known
+
+ip add
+
+2: ens192: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:0c:29:fe:72:3a brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.96/24 brd 192.168.1.255 scope global dynamic noprefixroute ens192
+       valid_lft 12289sec preferred_lft 12289sec
+    inet6 fe80::4859:d96c:5eeb:87c0/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+
+[core@bootstrap ~]$ nmcli con show
+NAME                UUID                                  TYPE      DEVICE 
+Wired connection 1  55134531-6be0-3f2c-83e2-dfbb7b0d7ecc  ethernet  ens192 
+
+[core@bootstrap ~]$ hostname
+bootstrap
+
+[core@bootstrap ~]$ ping master0
+ping: master0: Name or service not known
+[core@bootstrap ~]$ ping bootstrap
+PING bootstrap(bootstrap (fe80::4859:d96c:5eeb:87c0%ens192)) 56 data bytes
+64 bytes from bootstrap (fe80::4859:d96c:5eeb:87c0%ens192): icmp_seq=1 ttl=64 time=0.069 ms
+64 bytes from bootstrap (fe80::4859:d96c:5eeb:87c0%ens192): icmp_seq=2 ttl=64 time=0.047 ms
+
 ```
+
+Issue so far, networking is looking good from the "helper system" but not from the actual nodes.
 
 ## Second Error (Dell R710)
 
