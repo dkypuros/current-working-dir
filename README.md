@@ -278,7 +278,7 @@ systemctl status haproxy
 
 ## 7.2.4. Preparing the user-provisioned infrastructure
 All the MAC addresses in the dhcpd.conf file are from booting up VMs and shutting them down quickly, and gathering the details.
-(Instructions)
+
 [MAC Gathering Instructions](https://github.com/dkypuros/current-working-dir/blob/master/configs/gather-MAC-addresses.md)
 
 ```bash
@@ -295,21 +295,25 @@ systemctl status dhcpd
 ```bash
 dig +noall +answer @192.168.1.1 api.ocp4.example.com # Should see: api.ocp4.example.com. 604800 IN A 192.168.1.5
 dig +noall +answer @192.168.1.1 api-int.ocp4.example.com # Should see: api-int.ocp4.example.com. 604800 IN A 192.168.1.5
-dig +noall +answer @192.168.1.1 random.apps.ocp4.example.com # Should see:
- random.apps.ocp4.example.com. 604800 IN A 192.168.1.5
+dig +noall +answer @192.168.1.1 random.apps.ocp4.example.com # Should see: random.apps.ocp4.example.com. 604800 IN A 192.168.1.5
 
-dig +noall +answer @192.168.1.1 console-openshift-console.apps.ocp4.example.com
-should see:
+dig +noall +answer @192.168.1.1 console-openshift-console.apps.ocp4.example.com 
+```
+
+should see: 
 console-openshift-console.apps.ocp4.example.com. 604800 IN A 192.168.1.5
 bootstrap.ocp4.example.com. 604800 IN A 192.168.1.96
 
+```bash
 dig +noall +answer @192.168.1.1 bootstrap.ocp4.example.com # Should see: bootstrap.ocp4.example.com. 604800 IN A 192.168.1.96
-
 dig +noall +answer @192.168.1.1 -x 192.168.1.5
+```
+
 should see:
 5.1.168.192.in-addr.arpa. 604800 IN PTR api.ocp4.example.com.
 5.1.168.192.in-addr.arpa. 604800 IN PTR api-int.ocp4.example.com.
 
+```bash
 dig +noall +answer @192.168.1.1 -x 192.168.1.96 # Should see: 96.1.168.192.in-addr.arpa. 604800 IN PTR bootstrap.ocp4.example.com.
 ```
 
