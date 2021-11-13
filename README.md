@@ -192,7 +192,7 @@ external (active)
 ### Install and Enable Network Packages [unspecified in Docs]
 
 ```bash
-dnf install bind bind-utils dhcp-server httpd haproxy nfs-utils wget tftp-server syslinux vim -y
+dnf install bind bind-utils dhcp-server httpd haproxy nfs-utils wget tftp-server syslinux vim tar -y
 dnf update -y
 ```
 
@@ -320,7 +320,7 @@ dig +noall +answer @192.168.1.1 -x 192.168.1.96 # Should see: 96.1.168.192.in-ad
 ## 7.2.6. Generating a key pair for cluster node SSH access
 ```bash
 ssh-keygen -t ed25519 -N '' -f ~/.ssh/id_rsa
-cat ~/.ssh/id_rsa.pub
+cat ~/.ssh/id_rsa.pub #paste that into a temp gedit
 ssh-agent
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
@@ -349,7 +349,6 @@ Download the OC CLI file on a local computer
 https://access.redhat.com/downloads/content/290
 
 ```bash
-dnf install tar -y
 cd /ocp_files
 wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
 tar xvzf openshift-client-linux.tar.gz
@@ -363,6 +362,23 @@ Other Files to download
 ```bash
 wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/rhcos-live.x86_64.iso
 wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/rhcos-metal.x86_64.raw.gz
+```
+
+should see:
+
+```bash
+[root@helper ocp_files]# ll
+total 2813400
+-rwxr-xr-x. 2 root root  122849896 Oct 18 19:36 kubectl
+-rwxr-xr-x. 2 root root  122849896 Oct 18 19:36 oc
+-rw-r--r--. 1 root root   49412476 Oct 18 19:36 openshift-client-linux.tar.gz
+-rwxr-xr-x. 1 root root  427978752 Oct 21 20:52 openshift-install
+-rw-r--r--. 1 root root  104262134 Oct 21 20:52 openshift-install-linux.tar.gz
+-rw-r--r--. 1 root root       2735 Nov 12 21:52 pull-secret.txt
+-rw-r--r--. 1 root root        954 Oct 18 19:36 README.md
+-rw-r--r--. 1 root root 1034944512 Oct 18 02:51 rhcos-live.x86_64.iso
+-rw-r--r--. 1 root root 1018607407 Oct 18 02:52 rhcos-metal.x86_64.raw.gz
+
 ```
 
 ## 7.2.9. Manually creating the installation configuration file
@@ -440,6 +456,55 @@ View files that have been created so far
 ```bash
 tree /installation-dir/
 tree /ocp_files
+```
+
+Should See this:
+```bash
+[root@helper installation-dir]# tree /installation-dir/
+/installation-dir/
+├── manifests
+│   ├── 04-openshift-machine-config-operator.yaml
+│   ├── cluster-config.yaml
+│   ├── cluster-dns-02-config.yml
+│   ├── cluster-infrastructure-02-config.yml
+│   ├── cluster-ingress-02-config.yml
+│   ├── cluster-network-01-crd.yml
+│   ├── cluster-network-02-config.yml
+│   ├── cluster-proxy-01-config.yaml
+│   ├── cluster-scheduler-02-config.yml
+│   ├── cvo-overrides.yaml
+│   ├── kube-cloud-config.yaml
+│   ├── kube-system-configmap-root-ca.yaml
+│   ├── machine-config-server-tls-secret.yaml
+│   ├── openshift-config-secret-pull-secret.yaml
+│   └── openshift-kubevirt-infra-namespace.yaml
+├── openshift
+│   ├── 99_kubeadmin-password-secret.yaml
+│   ├── 99_openshift-cluster-api_master-user-data-secret.yaml
+│   ├── 99_openshift-cluster-api_worker-user-data-secret.yaml
+│   ├── 99_openshift-machineconfig_99-master-ssh.yaml
+│   ├── 99_openshift-machineconfig_99-worker-ssh.yaml
+│   └── openshift-install-manifests.yaml
+└── openshift-install
+
+2 directories, 22 files
+
+
+[root@helper installation-dir]# tree /ocp_files
+/ocp_files
+├── kubectl
+├── oc
+├── openshift-client-linux.tar.gz
+├── openshift-install
+├── openshift-install-linux.tar.gz
+├── pull-secret.txt
+├── README.md
+├── rhcos-live.x86_64.iso
+└── rhcos-metal.x86_64.raw.gz
+
+0 directories, 9 files
+
+
 ```
 
 Remove the Kubernetes manifest files that define the control plane machines. By removing these files, you prevent the cluster from automatically generating control plane machines. I didn’t notice anything was deleted.
@@ -527,9 +592,6 @@ I'll start with ISO installation first, then add PXE later.
 You can configure RHCOS during ISO and PXE installations. Both options need a webserver, so we will set this up now.
 
 ```bash
-rpm -qa httpd
-systemctl enable httpd
-systemctl start httpd
 systemctl status httpd
 ```
 
@@ -608,7 +670,7 @@ systemctl status dhcpd
 
 **Build the CoreOS Installer command**
 
-Obtain the SHA512 digest and save it somewhere. 
+Obtain the SHA512 digest and save it somewhere. Otherwise, you can install with "--insecure-ignition" later
 
 ```bash
 cd /installation-dir

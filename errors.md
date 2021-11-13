@@ -12,7 +12,7 @@ ERROR Failed waiting for Kubernetes API. This error usually happens when there i
 FATAL Bootstrap failed to complete   
 ```
 
-DNS Looks OK
+Checked DNS, and it looks OK.
 ```bash
 [root@helper installation-dir]# dig api.ocp4.example.com  | grep -A 2 ";; ANSWER SECTION:" # Should match: 192.168.1.5
 ;; ANSWER SECTION:
@@ -24,13 +24,7 @@ api.ocp4.example.com.	604800	IN	A	192.168.1.5
 5.1.168.192.in-addr.arpa. 604800 IN	PTR	api-int.ocp4.example.com.
 ```
 
-I'm looking at this currently
-
-## 8.6.5. The API is not accessible
-
-https://access.redhat.com/documentation/en-us/openshift_container_platform/4.8/html-single/installing/index#ipi-install-troubleshooting
-
-Hostname Resolution: Check the cluster nodes to ensure they have a fully qualified domain name, and not just localhost.localdomain. For example:
+Hostname Resolution fixed.
 
 ```bash
 hostname
@@ -39,21 +33,57 @@ hostnamectl set-hostname <hostname>
 
 ```
 
-specific error from rhcoreos
+Doing what error message says to do:
+
 ```bash
-I manually set the hostname, and the changes didn't seem to persist. Still same errors.read udf 192.168.1.1:44327 -> 192.168.1.1:53 no route to host.
+cd /installation-dir/
+./openshift-install gather bootstrap --help
 ```
 
-The story of DHCP and hostnames
-> But, as the man dhcpd.conf says: It should be noted here that most DHCP clients completely ignore the host-name option sent by the DHCP server, and  here is no way to configure them not to do this. So you generally have a choice of either not having any hostname to client IP address mapping that the  client will recognize, or doing DNS updates. 
+shows the following:
+```
+Gather debugging data for a failing-to-bootstrap control plane
 
-More Info from Redhat.com
-https://www.redhat.com/sysadmin/set-hostname-linux
+Usage:
+  openshift-install gather bootstrap [flags]
 
+Flags:
+      --bootstrap string     Hostname or IP of the bootstrap host
+  -h, --help                 help for bootstrap
+      --key stringArray      Path to SSH private keys that should be used for authentication. If no key was provided, SSH private keys from user's environment will be used
+      --master stringArray   Hostnames or IPs of all control plane hosts
+      --skipAnalysis         Skip analysis of the gathered data
 
+Global Flags:
+      --dir string         assets directory (default ".")
+      --log-level string   log level (e.g. "debug | info | warn | error") (default "info")
+
+```
+exploring these commands from help:
+
+```bash
+./openshift-install gather bootstrap --bootstrap bootstrap.ocp4.example.com --master master0.ocp4.example.com
+```
+
+output
+```bash
+[root@helper installation-dir]# ./openshift-install gather bootstrap --bootstrap bootstrap.ocp4.example.com --master master0.ocp4.example.com
+INFO Pulling debug logs from the bootstrap machine 
+INFO Bootstrap gather logs captured here "/installation-dir/log-bundle-20211113072507.tar.gz" 
+ERROR The bootstrap machine failed to download the release image 
+INFO Error: Error initializing source docker://quay.io/openshift-release-dev/ocp-release@sha256:386f4e08c48d01e0c73d294a88bb64fac3284d1d16a5b8938deb3b8699825a88: error pinging docker registry quay.io: Get "https://quay.io/v2/": dial tcp: lookup quay.io on 192.168.1.1:53: read udp 192.168.1.96:36996->192.168.1.1:53: read: no route to host 
+INFO Pull failed. Retrying quay.io/openshift-release-dev/ocp-release@sha256:386f4e08c48d01e0c73d294a88bb64fac3284d1d16a5b8938deb3b8699825a88... 
+INFO Error: Error initializing source docker://quay.io/openshift-release-dev/ocp-release@sha256:386f4e08c48d01e0c73d294a88bb64fac3284d1d16a5b8938deb3b8699825a88: error pinging docker registry quay.io: Get "https://quay.io/v2/": dial tcp: lookup quay.io on 192.168.1.1:53: read udp 192.168.1.96:40590->192.168.1.1:53: read: no route to host 
+```
+
+Found an error, I can't ping "quay.io" from the bootstrap node.
+```bash
 ssh core@bootstrap.ocp4.example.com
 
+[core@bootstrap ~]$ ping quay.io
+ping: quay.io: Name or service not known
 
+```
 
 ## Second Error (Dell R710)
 
