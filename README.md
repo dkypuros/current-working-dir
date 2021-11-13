@@ -193,6 +193,7 @@ external (active)
 
 ```bash
 dnf install bind bind-utils dhcp-server httpd haproxy nfs-utils wget tftp-server syslinux vim -y
+dnf update -y
 ```
 
 ## 7.2.3.5.1. Example DNS configuration for user-provisioned clusters
@@ -205,7 +206,6 @@ vim /etc/named/zones/db.example.com
 vim /etc/named/zones/db.reverse
 systemctl start named
 systemctl status named
-systemctl stop named
 ```
 
 paste from files on Hive - local directory - Visual Studio
@@ -260,10 +260,7 @@ curl localhost:8080
 systemctl enable haproxy
 ls /etc/haproxy/haproxy.cfg
 vim /etc/haproxy/haproxy.cfg
-```
-_copy config files from local drive_
 
-```bash
 firewall-cmd --add-port=6443/tcp --zone=internal --permanent # kube-api-server on control plane nodes
 firewall-cmd --add-port=6443/tcp --zone=external --permanent # kube-api-server on control plane nodes
 firewall-cmd --add-port=22623/tcp --zone=internal --permanent # machine-config server
@@ -275,12 +272,13 @@ firewall-cmd --add-port=9000/tcp --zone=external --permanent # HAProxy Stats
 firewall-cmd --reload
 
 setsebool -P haproxy_connect_any 1
-systemctl enable haproxy
 systemctl start haproxy
 systemctl status haproxy
 ```
 
 ## 7.2.4. Preparing the user-provisioned infrastructure
+All the MAC addresses in the dhcpd.conf file are from booting up VMs and shutting them down quickly, and gathering the details.
+
 ```bash
 systemctl enable dhcpd
 ll /etc/dhcp/
